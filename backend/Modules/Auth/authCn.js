@@ -10,17 +10,6 @@ export const register = catchAsync(async (req, res, next) => {
   if (isExist) {
     return next(new HandleERROR("username or email already exists", 400));
   }
-  const passReg = new RegExp(
-    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/,
-  );
-  if (!passReg.test(password)) {
-    return next(
-      new HandleERROR(
-        "password must contain at least one uppercase letter, one lowercase letter, and one number",
-        400,
-      ),
-    );
-  }
   const hashPass = bcrypt.hashSync(password, 10);
   const user = await User.create({
     ...otherData,
