@@ -11,6 +11,7 @@ const createUrlSchema = yup.object({
   shortCode: yup
     .string()
     .trim()
+    .transform((value) => (value === "" ? undefined : value))
     .nullable()
     .notRequired()
     .min(3, "custom short code must be at least 3 characters")

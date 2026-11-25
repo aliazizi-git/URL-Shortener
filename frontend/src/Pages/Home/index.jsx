@@ -13,7 +13,18 @@ export default function Home() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await api.post("url-shortener", { originalUrl, shortCode });
+      const trimmed = originalUrl.trim();
+      const formattedUrl =
+        trimmed.startsWith("http://") || trimmed.startsWith("https://")
+          ? trimmed
+          : `https://${trimmed}`;
+
+      const payload = { originalUrl: formattedUrl };
+      if (shortCode && shortCode.trim()) {
+        payload.shortCode = shortCode.trim();
+      }
+
+      const res = await api.post("url-shortener", payload);
       setResult(res.data.data.url);
       notify("success", "URL shortened successfully!");
     } catch (error) {
